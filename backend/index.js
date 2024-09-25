@@ -1,12 +1,18 @@
+import connectDB from "./database/connectDB.js";
+import authRoutes from "./routes/auth.route.js";
 import express from "express";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World 121212");
-});
+app.use(express.json()); // permite ler/receber as requisições req.body preenchidas pelos usuários
+
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  connectDB();
+  console.log(`Servidor rodando em: http://localhost:${PORT}`);
 });
