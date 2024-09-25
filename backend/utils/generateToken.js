@@ -6,7 +6,7 @@ const generateTokenAndSetCookie = (userId, res) => {
   });
 
   res.cookie("auth-token", token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in MS
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",

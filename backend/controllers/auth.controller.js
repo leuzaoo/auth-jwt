@@ -40,30 +40,30 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       name,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 horas
+      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    await user.save(); // Salva o usuário se tiver tudo certo com os campos preenchidos
+    await user.save();
 
-    generateTokenAndSetCookie(user._id, res); // Irá gerar o Token e salvar nos Cookies
+    generateTokenAndSetCookie(user._id, res);
 
     res.status(201).json({
       success: true,
       message: "Usuário criado com sucesso.",
       user: {
         ...user._doc,
-        password: undefined, // Remove a senha da resposta devolvida pelo servidor
+        password: undefined,
       },
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
-    //   console.log(
-    //     "Erro no controlador de criação de contas (signup):",
-    //     error.message
-    //   );
-    //   res
-    //     .status(500)
-    //     .json({ success: false, message: "Erro no servidor interno." });
+    console.log(
+      "Erro no controlador de criação de contas (signup): ",
+      error.message
+    );
+    res
+      .status(500)
+      .json({ success: false, message: "Erro no servidor interno." });
   }
 };
 
