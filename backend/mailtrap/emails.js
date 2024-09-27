@@ -1,4 +1,8 @@
-import { VERIFICATION_EMAIL_TEMPLATE } from "./emailsTemplate.js";
+import {
+  PASSWORD_RESET_REQUEST_TEMPLATE,
+  PASSWORD_RESET_SUCCESS_TEMPLATE,
+  VERIFICATION_EMAIL_TEMPLATE,
+} from "./emailsTemplate.js";
 import { mailtrapClient, sender } from "./mailtrap.config.js";
 
 export const sendVerificationEmail = async (email, verificationToken) => {
@@ -42,5 +46,52 @@ export const sendWelcomeEmail = async (email, name) => {
     console.error(`Erro ao tentar enviar o email de Boas Vindas: ${error}`);
 
     throw new Error(`Erro ao tentar enviar o email de Boas Vindas: ${error}`);
+  }
+};
+
+export const sendPasswordResetEmail = async (email, resetUrl) => {
+  const recipient = [{ email }];
+
+  try {
+    const response = await mailtrapClient.send({
+      from: sender,
+      to: recipient,
+      subject: "Atualização de senha",
+      html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetUrl),
+      category: "Atualização de senha",
+    });
+
+    console.log("Email de reset de senha enviado com sucesso", response);
+  } catch (error) {
+    console.error(`Erro ao tentar enviar o email para resetar senha: ${error}`);
+    throw new Error(
+      `Erro ao tentar enviar o email para resetar senha: ${error}`
+    );
+  }
+};
+
+export const sendResetSuccessEmail = async (email) => {
+  const recipient = [{ email }];
+
+  try {
+    const response = await mailtrapClient.send({
+      from: sender,
+      to: recipient,
+      subject: "Senha atualizada com sucesso",
+      html: PASSWORD_RESET_SUCCESS_TEMPLATE,
+      category: "Atualização de senha",
+    });
+
+    console.log(
+      "Email de confirmação de atualização de senha enviado com sucesso",
+      response
+    );
+  } catch (error) {
+    console.error(
+      `Erro ao tentar enviar o email de sucesso ao resetar a senha: ${error}`
+    );
+    throw new Error(
+      `Erro ao tentar enviar o email de sucesso ao resetar a senha: ${error}`
+    );
   }
 };
