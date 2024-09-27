@@ -232,3 +232,19 @@ export const resetPassword = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const checkAuth = async (req, res) => {
+  try {
+    const user = await User.findOne(req.userId).select("-password");
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Usuário não encontrado." });
+    }
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.log("Erro no controlador 'checkAuth': ", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
