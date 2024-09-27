@@ -97,9 +97,61 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("login pagge");
+  const { email, password } = req.body;
+
+  try {
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Preencha todos os campos." });
+    }
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Email do usuário não encontrado." });
+    }
+
+    const isPasswordCorrect = await bcryptjs.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({
+        success: false,
+        message: "Usuário encontrado mas a senha está incorreta.",
+      });
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Login feito com sucesso.",
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.log("Erro no controlador de Login:", error.message);
+    res
+      .status(500)
+      .json({ success: false, message: "Erro no servidor interno." });
+  }
 };
 
 export const logout = async (req, res) => {
-  res.send("logout pagge");
+  try {
+    res.clearCookie("auth-token");
+    res.status(200).json({ success: true, message: "Você saiu da conta." });
+  } catch (error) {
+    console.log("Erro no controlador de logout.");
+    res
+      .status(500)
+      .json({ success: false, message: "Erro no servidor interno." });
+  }
 };
