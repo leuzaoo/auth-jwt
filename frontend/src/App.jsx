@@ -1,12 +1,13 @@
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/authStore";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
 
 // Direciona o usuário para tela de login caso não esteja logado ou para tela de confirmação de email, caso não tenha confirmado o email
@@ -42,8 +43,7 @@ function App() {
     authCheck();
   }, [authCheck]);
 
-  console.log("autenticado", isAuthenticated);
-  console.log("user", user);
+  if (isCheckingAuth) return <LoadingSpinner />;
 
   return (
     <>
