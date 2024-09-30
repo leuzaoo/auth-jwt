@@ -1,5 +1,6 @@
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import { Routes, Route, Navigate } from "react-router-dom";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
@@ -37,7 +38,7 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 function App() {
-  const { isCheckingAuth, authCheck, isAuthenticated, user } = useAuthStore();
+  const { isCheckingAuth, authCheck } = useAuthStore();
 
   useEffect(() => {
     authCheck();
@@ -108,6 +109,14 @@ function App() {
             element={
               <RedirectAuthenticatedUser>
                 <ForgotPasswordPage />
+              </RedirectAuthenticatedUser>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <RedirectAuthenticatedUser>
+                <ResetPasswordPage />
               </RedirectAuthenticatedUser>
             }
           />
