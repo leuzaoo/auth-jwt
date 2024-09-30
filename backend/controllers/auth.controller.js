@@ -106,17 +106,11 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Preencha todos os campos." });
-    }
-
     const user = await User.findOne({ email: email });
 
     if (!user) {
       return res
-        .status(404)
+        .status(400)
         .json({ success: false, message: "Email do usuário não encontrado." });
     }
 
@@ -145,7 +139,7 @@ export const login = async (req, res) => {
   } catch (error) {
     console.log("Erro no controlador de Login:", error.message);
     res
-      .status(500)
+      .status(400)
       .json({ success: false, message: "Erro no servidor interno." });
   }
 };
