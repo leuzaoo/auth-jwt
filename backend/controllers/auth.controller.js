@@ -10,7 +10,7 @@ import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 
 export const signup = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     if (!email || !password || !name) {
