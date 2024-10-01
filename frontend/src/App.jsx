@@ -1,12 +1,14 @@
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/authStore";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
 
 // Direciona o usuário para tela de login caso não esteja logado ou para tela de confirmação de email, caso não tenha confirmado o email
@@ -36,14 +38,13 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 function App() {
-  const { isCheckingAuth, authCheck, isAuthenticated, user } = useAuthStore();
+  const { isCheckingAuth, authCheck } = useAuthStore();
 
   useEffect(() => {
     authCheck();
   }, [authCheck]);
 
-  console.log("autenticado", isAuthenticated);
-  console.log("user", user);
+  if (isCheckingAuth) return <LoadingSpinner />;
 
   return (
     <>
@@ -108,6 +109,14 @@ function App() {
             element={
               <RedirectAuthenticatedUser>
                 <ForgotPasswordPage />
+              </RedirectAuthenticatedUser>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <RedirectAuthenticatedUser>
+                <ResetPasswordPage />
               </RedirectAuthenticatedUser>
             }
           />
