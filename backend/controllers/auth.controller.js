@@ -156,31 +156,6 @@ export const logout = async (req, res) => {
   }
 };
 
-export const updateProfile = async (req, res) => {
-  try {
-    const allowedFields = ["name"];
-
-    const updateData = {};
-
-    for (const field of allowedFields) {
-      if (req.body[field]) {
-        updateData[field] = req.body[field];
-      }
-    }
-
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: updateData },
-      { new: true }
-    ).select("-password");
-
-    res.json(user);
-  } catch (error) {
-    console.error("Erro no controlador updateProfile:", error);
-    res.status(500).json({ message: "Erro no servidor" });
-  }
-};
-
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
 

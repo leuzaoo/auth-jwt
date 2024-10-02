@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { formatDate } from "../utils/formatDate";
 import { motion } from "framer-motion";
 
 const HomePage = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedData, setEditedData] = useState({});
-  const { user, logout } = useAuthStore();
+  const { user, error, isLoading, logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
@@ -56,43 +53,29 @@ const HomePage = () => {
           </p>
           <p className="text-gray-300">
             <span className="font-bold">Último login: </span>
-
             {formatDate(user.lastLogin)}
           </p>
         </motion.div>
       </div>
-      {isEditing ? (
-        <div>editando,.,..</div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="flex gap-5 mt-4"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsEditing(true)}
-            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-          >
-            Editar
-          </motion.button>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleLogout}
-            className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-          >
-            Sair da conta
-          </motion.button>
-        </motion.div>
-      )}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="flex gap-5 mt-4"
+      >
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleLogout}
+          className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
+              font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
+              focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        >
+          Sair da conta
+        </motion.button>
+      </motion.div>
     </motion.div>
   );
 };

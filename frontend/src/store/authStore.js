@@ -28,7 +28,7 @@ export const useAuthStore = create((set) => ({
       });
     } catch (error) {
       set({
-        error: error.response.data.message || "Error signing up",
+        error: error.response.data.message || "Erro ao criar a conta",
         isLoading: false,
       });
       throw error;

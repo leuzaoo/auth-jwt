@@ -16,7 +16,7 @@ const verifyToken = async (req, res, next) => {
     if (!decoded) {
       return res
         .status(401)
-        .json({ success: fals, message: "Não autorizado. Token inválido." });
+        .json({ success: false, message: "Não autorizado. Token inválido." });
     }
 
     const user = await User.findById(decoded.userId).select("-password");
