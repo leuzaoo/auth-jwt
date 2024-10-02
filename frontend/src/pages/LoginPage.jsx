@@ -33,7 +33,7 @@ const LoginPage = () => {
           <Input
             icon={Mail}
             type="email"
-            placeholder="Email Address"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -41,7 +41,7 @@ const LoginPage = () => {
           <Input
             icon={Lock}
             type="password"
-            placeholder="Password"
+            placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

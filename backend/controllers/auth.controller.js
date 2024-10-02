@@ -156,36 +156,6 @@ export const logout = async (req, res) => {
   }
 };
 
-export const updateProfile = async (req, res) => {
-  const { name } = req.body;
-  const userId = req.userId;
-
-  try {
-    if (!name || name.trim() === "") {
-      return res
-        .status(400)
-        .json({ message: "Digite um nome válido para salvar" });
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { name },
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-
-    res
-      .status(200)
-      .json({ message: "Nome atualizado com sucesso", user: updatedUser });
-  } catch (error) {
-    console.error("Erro no controlador updateProfile:", error);
-    res.status(500).json({ message: "Erro no servidor" });
-  }
-};
-
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
