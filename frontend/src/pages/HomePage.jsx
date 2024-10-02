@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const HomePage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedData, setEditedData] = useState({});
+  const [editedData, setEditedData] = useState({ name: "" });
   const { user, logout, updateProfile } = useAuthStore();
 
   const handleLogout = () => {
@@ -14,8 +14,23 @@ const HomePage = () => {
   };
 
   const handleSave = async () => {
-    await updateProfile(editedData.name);
-    setIsEditing(false);
+    if (!editedData.name.trim()) {
+      alert("O nome não pode estar vazio");
+      return;
+    }
+
+    try {
+      const response = await updateProfile(editedData.name);
+
+      if (response.error) {
+        throw new Error(response.message || "Erro ao atualizar o perfil");
+      }
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Erro ao atualizar o perfil:", error.message);
+      alert("Ocorreu um erro ao salvar as alterações.");
+    }
   };
 
   return (
@@ -62,7 +77,7 @@ const HomePage = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => handleSave()}
+              onClick={handleSave}
               className="w-full py-3 px-4 text-white rounded-lg bg-gradient-to-r from-green-600 to-green-700"
             >
               Salvar dados
@@ -111,7 +126,6 @@ const HomePage = () => {
               </p>
               <p className="text-gray-300">
                 <span className="font-bold">Último login: </span>
-
                 {formatDate(user.lastLogin)}
               </p>
             </motion.div>
@@ -128,8 +142,8 @@ const HomePage = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsEditing(true)}
               className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
+              focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
               Editar
             </motion.button>
@@ -139,8 +153,8 @@ const HomePage = () => {
               whileTap={{ scale: 0.95 }}
               onClick={handleLogout}
               className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
-				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
-				 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
+              focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
               Sair da conta
             </motion.button>

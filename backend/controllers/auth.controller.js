@@ -157,24 +157,29 @@ export const logout = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
+  const { name } = req.body;
+  const userId = req.userId;
+
   try {
-    const allowedFields = ["name"];
-
-    const updateData = {};
-
-    for (const field of allowedFields) {
-      if (req.body[field]) {
-        updateData[field] = req.body[field];
-      }
+    if (!name || name.trim() === "") {
+      return res
+        .status(400)
+        .json({ message: "Digite um nome válido para salvar" });
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      { $set: updateData },
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name },
       { new: true }
-    ).select("-password");
+    );
 
-    res.json(user);
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Nome atualizado com sucesso", user: updatedUser });
   } catch (error) {
     console.error("Erro no controlador updateProfile:", error);
     res.status(500).json({ message: "Erro no servidor" });
