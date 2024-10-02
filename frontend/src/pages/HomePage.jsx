@@ -1,8 +1,6 @@
 import { useAuthStore } from "../store/authStore";
 import { formatDate } from "../utils/formatDate";
 import { motion } from "framer-motion";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
 
 const HomePage = () => {
   const { user, error, isLoading, logout } = useAuthStore();
