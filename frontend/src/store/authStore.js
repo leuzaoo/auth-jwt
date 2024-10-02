@@ -28,7 +28,7 @@ export const useAuthStore = create((set) => ({
       });
     } catch (error) {
       set({
-        error: error.response.data.message || "Error signing up",
+        error: error.response.data.message || "Erro ao criar a conta",
         isLoading: false,
       });
       throw error;
@@ -69,6 +69,24 @@ export const useAuthStore = create((set) => ({
       });
     } catch (error) {
       set({ error: "Erro ao tentar sair da conta", isLoading: false });
+      throw error;
+    }
+  },
+
+  updateProfile: async (name) => {
+    set({ error: null });
+    try {
+      const response = await axios.post(`${API_URL}/updateProfile`, { name });
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error: error.response.data.message || "Erro ao atualizar o perfil",
+        isLoading: false,
+      });
       throw error;
     }
   },
