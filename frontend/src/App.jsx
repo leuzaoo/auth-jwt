@@ -121,7 +121,7 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
-          <Route path="/*" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Toaster />
       </div>
