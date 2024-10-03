@@ -5,6 +5,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import FloatingShape from "./components/FloatingShape";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import { useAuthStore } from "./store/authStore";
+import NotFoundPage from "./pages/NotFoundPage";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/LoginPage";
@@ -120,6 +121,7 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
         <Toaster />
       </div>
